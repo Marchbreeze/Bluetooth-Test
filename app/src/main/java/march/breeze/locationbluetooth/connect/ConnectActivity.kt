@@ -10,7 +10,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.ParcelUuid
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -20,7 +19,6 @@ import march.breeze.locationbluetooth.util.base.BaseActivity
 import march.breeze.locationbluetooth.util.extension.getParcelable
 import march.breeze.locationbluetooth.util.extension.setOnSingleClickListener
 import march.breeze.locationbluetooth.util.extension.toast
-import timber.log.Timber
 
 class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity_connect) {
 
@@ -31,11 +29,6 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
 
     private var pairedDeviceList = mutableListOf<BluetoothDevice>()
     private var searchedDeviceList = mutableListOf<BluetoothDevice>()
-
-
-    private var pairedDeviceName = ""
-    private var pairedDeviceMACAddress = ""
-    private lateinit var pairedDeviceUUID: ParcelUuid
 
     private var isPermitted = false
 
@@ -133,7 +126,10 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
 
     private fun checkBluetoothPermission() {
         val allPermissions = arrayOf(
-            Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN
+            Manifest.permission.BLUETOOTH_CONNECT,
+            Manifest.permission.BLUETOOTH_SCAN,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
         )
         if (allPermissions.any {
                 ActivityCompat.checkSelfPermission(
