@@ -13,9 +13,12 @@
         tools:context=".connect.ConnectActivity">
 
         <TextView
+            android:id="@+id/btn_start_bluetooth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello World!"
+            android:background="#81D4FA"
+            android:padding="12dp"
+            android:text="블루투스 시작하기"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
