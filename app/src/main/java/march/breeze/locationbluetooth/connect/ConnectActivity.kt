@@ -1,14 +1,11 @@
 package march.breeze.locationbluetooth.connect
 
-import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import march.breeze.locationbluetooth.R
 import march.breeze.locationbluetooth.databinding.ActivityConnectBinding
 import march.breeze.locationbluetooth.util.base.BaseActivity
@@ -27,7 +24,6 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
 
         initBluetoothStartBtnListener()
         initBluetoothActivateCallback()
-        activateBluetooth()
     }
 
     private fun initBluetoothStartBtnListener() {
@@ -49,12 +45,18 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
     private fun initBluetoothActivateCallback() {
         activityResultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == RESULT_OK) {
-                    toast("블루투스가 활성화되었습니다.")
-                } else if (it.resultCode == RESULT_CANCELED) {
-                    toast("블루투스 활성화가 취소되었습니다.")
-                } else {
-                    toast("오류가 발생했습니다.")
+                when (it.resultCode) {
+                    RESULT_OK -> {
+                        toast("블루투스가 활성화되었습니다.")
+                    }
+
+                    RESULT_CANCELED -> {
+                        toast("블루투스 활성화가 취소되었습니다.")
+                    }
+
+                    else -> {
+                        toast("오류가 발생했습니다.")
+                    }
                 }
             }
     }
@@ -69,5 +71,10 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
                 toast("이미 블루투스가 활성화되어 있습니다.")
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        bluetoothAdapter = null
     }
 }
