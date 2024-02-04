@@ -29,7 +29,9 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
 
     private lateinit var activateResultLauncher: ActivityResultLauncher<Intent>
 
-    private var availableDeviceList = mutableListOf<BluetoothDevice>()
+    private var pairedDeviceList = mutableListOf<BluetoothDevice>()
+    private var searchedDeviceList = mutableListOf<BluetoothDevice>()
+
 
     private var pairedDeviceName = ""
     private var pairedDeviceMACAddress = ""
@@ -37,7 +39,7 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
 
     private var isPermitted = false
 
-    private lateinit var searchReceiver: BroadcastReceiver
+    private var searchReceiver: BroadcastReceiver? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,8 +117,8 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
                 if (it.isEnabled) {
                     val pairedDevices: Set<BluetoothDevice> = it.bondedDevices
                     if (pairedDevices.isNotEmpty()) {
-                        availableDeviceList = pairedDevices.toMutableList()
-                        toast("${availableDeviceList.size}개의 기기가 등록되어 있습니다.")
+                        pairedDeviceList = pairedDevices.toMutableList()
+                        toast("${pairedDeviceList.size}개의 기기가 등록되어 있습니다.")
                     } else {
                         toast("기존에 등록된 기기가 없습니다")
                     }
@@ -185,11 +187,7 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
                         val device = intent.getParcelable(
                             BluetoothDevice.EXTRA_DEVICE, BluetoothDevice::class.java
                         )
-                        pairedDeviceName = device?.name ?: return
-                        pairedDeviceMACAddress = device.address
-                        pairedDeviceUUID = device.uuids[0]
-                        bluetoothAdapter?.cancelDiscovery()
-                        toast("기기 검색을 완료했습니다.")
+                        if (device != null) searchedDeviceList.add(device)
                     }
                 }
             }
@@ -201,6 +199,7 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
         super.onDestroy()
         bluetoothAdapter = null
         unregisterReceiver(searchReceiver)
+        searchReceiver = null
     }
 
     companion object {
