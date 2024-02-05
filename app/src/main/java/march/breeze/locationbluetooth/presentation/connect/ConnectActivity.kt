@@ -1,4 +1,4 @@
-package march.breeze.locationbluetooth.connect
+package march.breeze.locationbluetooth.presentation.connect
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import march.breeze.locationbluetooth.R
 import march.breeze.locationbluetooth.databinding.ActivityConnectBinding
+import march.breeze.locationbluetooth.model.Device
 import march.breeze.locationbluetooth.util.base.BaseActivity
 import march.breeze.locationbluetooth.util.extension.getParcelable
 import march.breeze.locationbluetooth.util.extension.setOnSingleClickListener
@@ -27,8 +28,12 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
 
     private lateinit var activateResultLauncher: ActivityResultLauncher<Intent>
 
-    private var pairedDeviceList = mutableListOf<BluetoothDevice>()
-    private var searchedDeviceList = mutableListOf<BluetoothDevice>()
+    private var pairedDeviceList = mutableListOf<Device>()
+    private var _pairedListAdapter: PairedListAdapter? = null
+    private val pairedListAdapter
+        get() = requireNotNull(_pairedListAdapter) { "adapter is not initialized" }
+
+    private var searchedDeviceList = mutableListOf<Device>()
 
     private var isPermitted = false
 
@@ -41,6 +46,7 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
         initStartBtnListener()
         initPairedDeviceBtnListener()
         initDeviceSearchBtnListener()
+        initAdapter()
         initBluetoothActivateCallback()
         checkBluetoothPermission()
         initSearchBroadcastReceiver()
@@ -70,6 +76,11 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
         binding.btnSearchDevice.setOnSingleClickListener {
             searchDevice()
         }
+    }
+
+    private fun initAdapter() {
+        _pairedListAdapter = PairedListAdapter()
+        binding.rvPairedList.adapter = pairedListAdapter
     }
 
     private fun initBluetoothActivateCallback() {
@@ -110,8 +121,10 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
                 if (it.isEnabled) {
                     val pairedDevices: Set<BluetoothDevice> = it.bondedDevices
                     if (pairedDevices.isNotEmpty()) {
-                        pairedDeviceList = pairedDevices.toMutableList()
-                        toast("${pairedDeviceList.size}개의 기기가 등록되어 있습니다.")
+                        pairedDevices.forEach { device ->
+                            pairedDeviceList.add(Device(device.name, device.address, device.uuids))
+                        }
+                        pairedListAdapter.addList(pairedDeviceList)
                     } else {
                         toast("기존에 등록된 기기가 없습니다")
                     }
@@ -183,7 +196,13 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
                         val device = intent.getParcelable(
                             BluetoothDevice.EXTRA_DEVICE, BluetoothDevice::class.java
                         )
-                        if (device != null) searchedDeviceList.add(device)
+                        if (device != null) searchedDeviceList.add(
+                            Device(
+                                device.name,
+                                device.address,
+                                device.uuids
+                            )
+                        )
                     }
                 }
             }
