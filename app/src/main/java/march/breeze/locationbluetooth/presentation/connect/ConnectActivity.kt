@@ -34,6 +34,9 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
         get() = requireNotNull(_pairedListAdapter) { "adapter is not initialized" }
 
     private var searchedDeviceList = mutableListOf<Device>()
+    private var _searchListAdapter: SearchListAdapter? = null
+    private val searchListAdapter
+        get() = requireNotNull(_searchListAdapter) { "adapter is not initialized" }
 
     private var isPermitted = false
 
@@ -80,7 +83,9 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
 
     private fun initAdapter() {
         _pairedListAdapter = PairedListAdapter()
+        _searchListAdapter = SearchListAdapter()
         binding.rvPairedList.adapter = pairedListAdapter
+        binding.rvSearchList.adapter = searchListAdapter
     }
 
     private fun initBluetoothActivateCallback() {
@@ -203,6 +208,7 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
                                 device.uuids
                             )
                         )
+                        searchListAdapter.addList(searchedDeviceList)
                     }
                 }
             }
@@ -215,6 +221,8 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
         bluetoothAdapter = null
         unregisterReceiver(searchReceiver)
         searchReceiver = null
+        _pairedListAdapter = null
+        _searchListAdapter = null
     }
 
     companion object {
