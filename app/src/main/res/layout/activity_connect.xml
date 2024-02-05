@@ -13,11 +13,12 @@
         tools:context=".connect.ConnectActivity">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/layout_btn"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:gravity="center"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -26,29 +27,60 @@
                 android:id="@+id/btn_start_bluetooth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
                 android:background="#81D4FA"
+                android:gravity="center"
                 android:padding="12dp"
-                android:text="블루투스 시작하기" />
+                android:text="블루투스\n시작하기" />
 
             <TextView
                 android:id="@+id/btn_show_paired_device"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="12dp"
+                android:layout_weight="1"
                 android:background="#80DEEA"
+                android:gravity="center"
                 android:padding="12dp"
-                android:text="페어링된 기기 보기" />
+                android:text="페어링된\n기기 보기" />
 
             <TextView
                 android:id="@+id/btn_search_device"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_weight="1"
                 android:background="#80CBC4"
+                android:gravity="center"
                 android:padding="12dp"
-                android:text="페어링할 기기 찾기" />
+                android:text="페어링할\n기기 찾기" />
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_paired_list_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:text="연결된 기기"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_btn" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_paired_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/shape_gray_fill_12_rect"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_paired_list_title"
+            tools:listitem="@layout/item_paired_list" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
