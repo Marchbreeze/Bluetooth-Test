@@ -21,6 +21,7 @@ import march.breeze.locationbluetooth.util.base.BaseActivity
 import march.breeze.locationbluetooth.util.extension.getParcelable
 import march.breeze.locationbluetooth.util.extension.setOnSingleClickListener
 import march.breeze.locationbluetooth.util.extension.toast
+import java.util.UUID
 
 class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity_connect) {
 
@@ -241,5 +242,6 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
 
     companion object {
         private const val PERMIT_REQUEST = 0
+        private val MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb")
     }
 }
