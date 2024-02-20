@@ -13,6 +13,7 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isVisible
 import march.breeze.locationbluetooth.R
 import march.breeze.locationbluetooth.databinding.ActivityConnectBinding
 import march.breeze.locationbluetooth.model.Device
@@ -183,6 +184,11 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
                     }
                     it.startDiscovery()
                     toast("페어링 가능한 기기를 탐색합니다.")
+                    with(binding) {
+                        tvSearchListTitle.isVisible = true
+                        rvSearchList.isVisible = true
+                        progressBarSearch.isVisible = true
+                    }
                 } else {
                     toast("블루투스가 비활성화되어 있습니다.")
                 }
@@ -211,6 +217,10 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
                         )
                         searchListAdapter.submitList(searchedDeviceList)
                         searchListAdapter.notifyDataSetChanged()
+                    }
+
+                    BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
+                        binding.progressBarSearch.isVisible = false
                     }
                 }
             }

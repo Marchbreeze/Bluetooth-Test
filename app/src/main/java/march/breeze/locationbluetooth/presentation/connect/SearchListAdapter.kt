@@ -3,7 +3,6 @@ package march.breeze.locationbluetooth.presentation.connect
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import march.breeze.locationbluetooth.databinding.ItemPairedListBinding
 import march.breeze.locationbluetooth.databinding.ItemSearchListBinding
 import march.breeze.locationbluetooth.model.Device
 import march.breeze.locationbluetooth.util.extension.ItemDiffCallback

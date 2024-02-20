@@ -72,13 +72,13 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_paired_list"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="12dp"
             android:layout_marginTop="12dp"
             android:background="@drawable/shape_gray_fill_12_rect"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_paired_list_title"
@@ -90,6 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
+            android:visibility="gone"
             android:text="검색된 기기"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -99,16 +100,27 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_search_list"
             android:layout_width="0dp"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="12dp"
             android:layout_marginTop="12dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:orientation="vertical"
             android:background="@drawable/shape_gray_fill_12_rect"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_search_list_title"
             tools:listitem="@layout/item_search_list" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar_search"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="5dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_search_list" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
