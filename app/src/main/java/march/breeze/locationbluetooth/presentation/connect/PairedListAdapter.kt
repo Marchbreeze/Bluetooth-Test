@@ -19,12 +19,6 @@ class PairedListAdapter : ListAdapter<Device, PairedListViewHolder>(diffUtil) {
         holder.onBind(getItem(position))
     }
 
-    fun addList(newItems: List<Device>) {
-        val currentItems = currentList.toMutableList()
-        currentItems.addAll(newItems)
-        submitList(currentItems)
-    }
-
     companion object {
         private val diffUtil = ItemDiffCallback<Device>(
             onItemsTheSame = { old, new -> old.address == new.address },

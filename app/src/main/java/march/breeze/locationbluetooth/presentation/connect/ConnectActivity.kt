@@ -129,7 +129,8 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
                         pairedDevices.forEach { device ->
                             pairedDeviceList.add(Device(device.name, device.address, device.uuids))
                         }
-                        pairedListAdapter.addList(pairedDeviceList)
+                        pairedListAdapter.submitList(pairedDeviceList)
+                        toast("${pairedDeviceList.size}개의 페어링되어 있는 기기를 추가했습니다.")
                     } else {
                         toast("기존에 등록된 기기가 없습니다")
                     }
@@ -201,14 +202,15 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
                         val device = intent.getParcelable(
                             BluetoothDevice.EXTRA_DEVICE, BluetoothDevice::class.java
                         )
-                        if (device != null) searchedDeviceList.add(
+                        if (device != null && device.name != null) searchedDeviceList.add(
                             Device(
-                                device.name,
-                                device.address,
-                                device.uuids
+                                device.name ?: "",
+                                device.address ?: "",
+                                device.uuids ?: arrayOf()
                             )
                         )
-                        searchListAdapter.addList(searchedDeviceList)
+                        searchListAdapter.submitList(searchedDeviceList)
+                        searchListAdapter.notifyDataSetChanged()
                     }
                 }
             }
