@@ -34,7 +34,7 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
     private val pairedListAdapter
         get() = requireNotNull(_pairedListAdapter) { "adapter is not initialized" }
 
-    private var searchedDeviceList = mutableListOf<Device>()
+    val searchedDeviceSet = LinkedHashSet<Device>()
     private var _searchListAdapter: SearchListAdapter? = null
     private val searchListAdapter
         get() = requireNotNull(_searchListAdapter) { "adapter is not initialized" }
@@ -208,14 +208,16 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
                         val device = intent.getParcelable(
                             BluetoothDevice.EXTRA_DEVICE, BluetoothDevice::class.java
                         )
-                        if (device != null && device.name != null) searchedDeviceList.add(
-                            Device(
-                                device.name ?: "",
-                                device.address ?: "",
-                                device.uuids ?: arrayOf()
+                        if (device != null && device.name != null) {
+                            searchedDeviceSet.add(
+                                Device(
+                                    device.name ?: "",
+                                    device.address ?: "",
+                                    device.uuids ?: arrayOf()
+                                )
                             )
-                        )
-                        searchListAdapter.submitList(searchedDeviceList)
+                        }
+                        searchListAdapter.submitList(searchedDeviceSet.toList())
                         searchListAdapter.notifyDataSetChanged()
                     }
 
