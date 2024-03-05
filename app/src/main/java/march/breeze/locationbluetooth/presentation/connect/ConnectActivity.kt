@@ -1,6 +1,7 @@
 package march.breeze.locationbluetooth.presentation.connect
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
@@ -17,6 +18,7 @@ import androidx.core.view.isVisible
 import march.breeze.locationbluetooth.R
 import march.breeze.locationbluetooth.databinding.ActivityConnectBinding
 import march.breeze.locationbluetooth.model.Device
+import march.breeze.locationbluetooth.thread.ClientThread
 import march.breeze.locationbluetooth.util.base.BaseActivity
 import march.breeze.locationbluetooth.util.extension.getParcelable
 import march.breeze.locationbluetooth.util.extension.setOnSingleClickListener
@@ -84,8 +86,8 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
     }
 
     private fun initAdapter() {
-        _pairedListAdapter = PairedListAdapter()
-        _searchListAdapter = SearchListAdapter()
+        _pairedListAdapter = PairedListAdapter(::initItemClickListener)
+        _searchListAdapter = SearchListAdapter(::initItemClickListener)
         binding.rvPairedList.adapter = pairedListAdapter
         binding.rvSearchList.adapter = searchListAdapter
     }
@@ -202,8 +204,8 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
     private fun initSearchBroadcastReceiver() {
         searchReceiver = object : BroadcastReceiver() {
 
+            @SuppressLint("MissingPermission")
             override fun onReceive(c: Context?, intent: Intent?) {
-                checkBluetoothPermission()
                 when (intent?.action) {
                     BluetoothDevice.ACTION_FOUND -> {
                         val device = intent.getParcelable(
@@ -229,6 +231,22 @@ class ConnectActivity() : BaseActivity<ActivityConnectBinding>(R.layout.activity
             }
         }
         registerReceiver(searchReceiver, IntentFilter(BluetoothDevice.ACTION_FOUND))
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun initItemClickListener(address: String) {
+        bluetoothAdapter?.let { adapter ->
+            if (adapter.isDiscovering) {
+                adapter.cancelDiscovery()
+            }
+            val device = adapter.getRemoteDevice(address)
+            try {
+                toast("${device.name}과 연결되었습니다.")
+                ClientThread(bluetoothAdapter, MY_UUID, device).start()
+            } catch (e: Exception) {
+                toast("기기의 전원이 꺼져 있습니다. 기기를 확인해주세요.")
+            }
+        }
     }
 
     override fun onDestroy() {

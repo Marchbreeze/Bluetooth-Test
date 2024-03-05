@@ -10,12 +10,12 @@ import java.util.UUID
 
 @SuppressLint("MissingPermission")
 class ServerThread(
-    private val bluetoothAdapter: BluetoothAdapter,
+    private val bluetoothAdapter: BluetoothAdapter?,
     private val uuid: UUID
 ) : Thread() {
 
     private val serverSocket: BluetoothServerSocket? by lazy(LazyThreadSafetyMode.NONE) {
-        bluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(SOCKET_NAME, uuid)
+        bluetoothAdapter?.listenUsingInsecureRfcommWithServiceRecord(SOCKET_NAME, uuid)
     }
 
     override fun run() {

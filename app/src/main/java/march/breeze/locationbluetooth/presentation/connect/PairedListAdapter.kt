@@ -7,12 +7,14 @@ import march.breeze.locationbluetooth.databinding.ItemPairedListBinding
 import march.breeze.locationbluetooth.model.Device
 import march.breeze.locationbluetooth.util.extension.ItemDiffCallback
 
-class PairedListAdapter : ListAdapter<Device, PairedListViewHolder>(diffUtil) {
+class PairedListAdapter(
+    private val onClicked: (String) -> (Unit)
+) : ListAdapter<Device, PairedListViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PairedListViewHolder {
         val inflater by lazy { LayoutInflater.from(parent.context) }
         val binding: ItemPairedListBinding = ItemPairedListBinding.inflate(inflater, parent, false)
-        return PairedListViewHolder(binding)
+        return PairedListViewHolder(binding, onClicked)
     }
 
     override fun onBindViewHolder(holder: PairedListViewHolder, position: Int) {

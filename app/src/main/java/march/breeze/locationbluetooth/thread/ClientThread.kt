@@ -10,7 +10,7 @@ import java.util.UUID
 
 @SuppressLint("MissingPermission")
 class ClientThread(
-    private val bluetoothAdapter: BluetoothAdapter,
+    private val bluetoothAdapter: BluetoothAdapter?,
     private val uuid: UUID,
     private val device: BluetoothDevice,
 ) : Thread() {
@@ -20,7 +20,7 @@ class ClientThread(
     }
 
     override fun run() {
-        bluetoothAdapter.cancelDiscovery()
+        bluetoothAdapter?.cancelDiscovery()
         try {
             socket?.let {
                 it.connect()
